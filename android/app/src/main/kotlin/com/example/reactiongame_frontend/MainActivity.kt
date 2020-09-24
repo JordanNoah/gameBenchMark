@@ -1,0 +1,6 @@
+package com.example.reactiongame_frontend
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
