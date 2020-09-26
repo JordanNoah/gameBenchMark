@@ -16,15 +16,17 @@ class ProfileCardEdit extends StatefulWidget {
   _ProfileCardEditState createState() => _ProfileCardEditState();
 }
 
-DateTime selectedDate = DateTime.now();
-final DateFormat formatter = DateFormat('dd/MM/yyyy');
+DateTime selectedDate;
 
+String idUser;
 TextEditingController name = new TextEditingController();
 TextEditingController dateBorn = new TextEditingController();
 TextEditingController email = new TextEditingController();
 TextEditingController password = new TextEditingController();
 String gender;
 String country;
+
+int idGender;
 
 GlobalKey<FormState> fromkey = GlobalKey<FormState>();
 
@@ -38,7 +40,7 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
   Future buildMaterialDatePicker(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.parse(dateBorn.text),
+      initialDate: DateFormat('dd/MM/yyyy').parse(dateBorn.text),
       firstDate: DateTime(1900),
       lastDate: DateTime(2025),
       builder: (context, child) {
@@ -52,7 +54,8 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        dateBorn.text = selectedDate.toString();
+        final DateFormat formatter = DateFormat('dd/MM/yyyy');
+        dateBorn.text = formatter.format(picked).toString();
       });
     }
   }
@@ -85,8 +88,18 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
     var jsonResonse = json.decode(response.body)["user"];
     var users = userModelFromJson(json.encode(jsonResonse));
     var formatter = DateFormat('dd/MM/yyyy').parse(users.dateBorn);
+
+    final DateFormat format = DateFormat('dd/MM/yyyy');
+
+    this.users.asMap().forEach((key, value) {
+      if (value.names == users.gender) {
+        idGender = key;
+      }
+    });
+
+    idUser = jsonResonse["user_id"].toString();
     name.text = users.name;
-    dateBorn.text = formatter.toString();
+    dateBorn.text = format.format(formatter).toString();
     email.text = users.email;
     password.text = users.password;
     gender = users.gender;
@@ -94,9 +107,9 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
   }
 
   Future changeUser() async {
-    var userId = await getIdUser();
     final String apiUrl = "http://192.168.100.54:3002/api/save_modification";
     final response = await http.post(apiUrl, body: {
+      "idUser": idUser,
       "name": name.text,
       "dateBorn": dateBorn.text,
       "email": email.text,
@@ -104,6 +117,9 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
       "gender": gender,
       "country": country
     });
+    if (response.statusCode == 200) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -188,7 +204,7 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
                   SizedBox(width: 50.0),
                   Expanded(
                     child: DropdownButtonFormField(
-                      value: users[2],
+                      value: users[idGender],
                       validator: (val) =>
                           val == null ? 'Escoja un genero' : null,
                       isExpanded: true,

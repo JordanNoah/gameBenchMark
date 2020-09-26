@@ -18,6 +18,12 @@ void closeAccount() {
 
 class _ConfigAccountState extends State<ConfigAccount> {
   @override
+  void initState() {
+    super.initState();
+    editProfile = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -50,55 +56,52 @@ class _ConfigAccountState extends State<ConfigAccount> {
                     child: Card(
                       child: Column(
                         children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                              margin: EdgeInsets.all(10),
-                              child: FlatButton(
-                                color: Colors.transparent,
-                                onPressed: () {
-                                  setState(() {
-                                    editProfile = !editProfile;
-                                  });
-                                },
-                                child: Container(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Builder(
-                                        builder: (BuildContext context) {
-                                      if (editProfile) {
-                                        return Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                                margin:
-                                                    EdgeInsets.only(right: 10),
-                                                child: Icon(Icons.cancel)),
-                                            Text('Cancelar cambios'),
-                                          ],
-                                        );
-                                      } else {
-                                        return Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                                margin:
-                                                    EdgeInsets.only(right: 10),
-                                                child: Icon(Icons.edit)),
-                                            Text('Editar perfil'),
-                                          ],
-                                        );
-                                      }
-                                    })),
-                              ),
-                            ),
-                          ),
                           Builder(builder: (BuildContext context) {
                             if (editProfile) {
                               return ProfileCardEdit();
                             } else {
                               return ProfileCardWatch();
                             }
-                          })
+                          }),
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            child: FlatButton(
+                              color: Colors.transparent,
+                              onPressed: () {
+                                setState(() {
+                                  editProfile = !editProfile;
+                                });
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.all(10.0),
+                                  child:
+                                      Builder(builder: (BuildContext context) {
+                                    if (editProfile) {
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                              margin:
+                                                  EdgeInsets.only(right: 10),
+                                              child: Icon(Icons.cancel)),
+                                          Text('Cancelar cambios'),
+                                        ],
+                                      );
+                                    } else {
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                              margin:
+                                                  EdgeInsets.only(right: 10),
+                                              child: Icon(Icons.edit)),
+                                          Text('Editar perfil'),
+                                        ],
+                                      );
+                                    }
+                                  })),
+                            ),
+                          ),
                         ],
                       ),
                     ),
