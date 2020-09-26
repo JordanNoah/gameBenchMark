@@ -26,6 +26,7 @@ Future loginUser() async {
   final response = await http.get(apiUrl);
   if (response.statusCode == 200) {
     final String responseString = response.body;
+    print(responseString);
     return responseString;
   } else {
     return null;

@@ -24,6 +24,7 @@ TextEditingController dateBorn = new TextEditingController();
 TextEditingController email = new TextEditingController();
 TextEditingController password = new TextEditingController();
 String gender;
+String codeCountry;
 String country;
 
 int idGender;
@@ -103,6 +104,7 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
     email.text = users.email;
     password.text = users.password;
     gender = users.gender;
+    codeCountry = users.codeCountry;
     country = users.country;
   }
 
@@ -115,6 +117,7 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
       "email": email.text,
       "password": password.text,
       "gender": gender,
+      "codeCountry": codeCountry,
       "country": country
     });
     if (response.statusCode == 200) {
@@ -243,10 +246,12 @@ class _ProfileCardEditState extends State<ProfileCardEdit> {
                     appBarBackgroundColor: Colors.amber,
                     isShowFlag: true,
                     isShowTitle: true,
-                    isShowCode: true,
+                    isShowCode: false,
                     isDownIcon: true,
                     showEnglishName: true,
+                    initialSelection: codeCountry,
                     onChanged: (CountryCode code) {
+                      codeCountry = code.dialCode;
                       country = code.name;
                     },
                   ),

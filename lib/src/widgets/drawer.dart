@@ -17,6 +17,7 @@ class DrawerAplication extends StatefulWidget {
 Future getUserById(int userId) async {
   final String apiUrl = "http://192.168.100.54:3002/api/get_user_id/$userId";
   final response = await http.get(apiUrl);
+  print(response.body);
   return response.body;
 }
 
@@ -44,7 +45,11 @@ class _DrawerState extends State<DrawerAplication> {
                               future: getUserById(snapshot.data),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
-                                if (snapshot.data != null) {
+                                var response =
+                                    json.decode(snapshot.data)["status"];
+                                if (response == "no-existed") {
+                                  return Disconected();
+                                } else {
                                   var jsonUser = json.decode(snapshot.data);
                                   var user = userModelFromJson(
                                       json.encode(jsonUser["user"]));
@@ -52,8 +57,6 @@ class _DrawerState extends State<DrawerAplication> {
                                     email: user.email,
                                     namesUser: user.name,
                                   );
-                                } else {
-                                  return Disconected();
                                 }
                               },
                             );

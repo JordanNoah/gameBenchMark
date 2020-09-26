@@ -20,6 +20,7 @@ TextEditingController dateBorn = new TextEditingController();
 TextEditingController email = new TextEditingController();
 TextEditingController password = new TextEditingController();
 String gender;
+String codeCountry;
 String country;
 
 GlobalKey<FormState> fromkey = GlobalKey<FormState>();
@@ -39,6 +40,7 @@ Future createUser() async {
     "email": email.text,
     "password": password.text,
     "gender": gender,
+    "codeCountry": codeCountry,
     "country": country
   });
   if (response.statusCode == 200) {
@@ -246,6 +248,7 @@ class _RegisterState extends State<Register> {
                                 showEnglishName: true,
                                 onChanged: (CountryCode code) {
                                   setState(() {
+                                    codeCountry = code.dialCode;
                                     country = code.name;
                                   });
                                 },
